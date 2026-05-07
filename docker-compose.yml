@@ -1,0 +1,39 @@
+# ============================================
+# AutoOps AI — Docker Compose (Development)
+# ============================================
+# Usage:
+#   docker-compose up -d          # Start all services
+#   docker-compose logs -f        # Follow logs
+#   docker-compose down           # Stop services
+# ============================================
+
+version: "3.9"
+
+services:
+  # ---- Backend (FastAPI) ----
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: autoops-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.example
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+
+  # ---- Frontend (React — Phase 1 optional) ----
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   container_name: autoops-frontend
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   depends_on:
+  #     - backend
+  #   restart: unless-stopped
