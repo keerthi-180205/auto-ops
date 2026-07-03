@@ -1,92 +1,26 @@
-# 🚀 AutoOps AI
-
-## Overview
-
-AutoOps AI is an intelligent, agent-based DevOps automation system that converts natural language user intent into real cloud deployment and execution. Built by a 4-member team, it automates the complete DevOps lifecycle using a multi-agent architecture.
-
-**Phase 1 focuses on building a working end-to-end pipeline:**
-
-```
-User Input → Planning → Execution → EC2 Deployment → Flask App Running
-```
+# AutoOps AI 🤖
+> **ML-powered DevOps assistant — natural language instructions to real AWS EC2 deployments.**
 
 ---
 
-## System Architecture
-
-```
-User
- ↓
-POST /deploy  (API Layer)
- ↓
-Orchestrator  (Workflow Engine)
- ↓
-┌─────────────┐     ┌──────────────┐
-│ Planner     │ ──→ │  Executor    │
-│ Agent       │     │  Agent       │
-└─────────────┘     └──────┬───────┘
-                           ↓
-                    ┌──────────────┐
-                    │  AWS (EC2)   │
-                    │  + Flask     │
-                    │  Deployment  │
-                    └──────────────┘
-                           ↓
-                    Public IP + URL returned
-```
+## What It Does
+You type: `"Deploy a t2.micro EC2 with nginx in us-east-1"`
+AutoOps AI:
+1. **Understands your intent** using a trained ML classifier
+2. **Extracts parameters** (instance type, region, app) using NER
+3. **Predicts if it'll fail** before executing
+4. **Provisions the EC2 instance** on AWS via boto3
+5. **SSHes in and deploys** your app via Paramiko
 
 ---
 
-## Core Workflow
+## Team
 
-```
-User → API → Orchestrator → Planner → Executor → AWS → Deployment
-```
-
-1. User sends a natural language prompt (e.g., "deploy flask app")
-2. API receives the request and passes it to the Orchestrator
-3. Orchestrator calls the Planner Agent to convert intent into a structured plan
-4. Orchestrator passes the plan to the Executor Agent
-5. Executor calls the AWS module to create an EC2 instance
-6. Executor calls the Deployment module to SSH in and deploy Flask
-7. Public IP and URL are returned to the user
-
----
-
-## Phase 1 Scope
-
-- ✅ Deploy Flask app on AWS EC2 via natural language input
-- ✅ Basic rule-based planner (if/else, no AI/ML)
-- ✅ Simple orchestrator (sequential: Planner → Executor)
-- ✅ EC2 instance creation via boto3
-- ✅ Flask deployment via SSH (Paramiko)
-- ✅ Public URL returned to user
-- ❌ No AI/ML, no monitoring, no cost optimization (Phase 2+)
-
----
-
-## Tech Stack
-
-| Layer          | Technology                        |
-|----------------|-----------------------------------|
-| **Backend**    | Python 3.11+ / FastAPI            |
-| **Cloud**      | AWS (EC2)                         |
-| **IaC**        | Terraform (optional Phase 1)      |
-| **SSH**        | Paramiko                          |
-| **AWS SDK**    | boto3                             |
-| **Frontend**   | React (optional Phase 1)          |
-| **Database**   | PostgreSQL (Phase 2)              |
-
----
-
-## Team Responsibilities
-
-| Member     | Ownership                          | Directories                          |
-|------------|------------------------------------|--------------------------------------|
-| **Member 1** | API + Orchestrator              | `backend/api/`, `backend/orchestrator/` |
-| **Member 2** | Agents (Planner + Executor)     | `backend/agents/`                    |
-| **Member 3** | AWS Infrastructure + Deployment | `backend/infra/`, `infrastructure/`, `scripts/` |
-| **Member 4** | Frontend + Testing              | `frontend/`, `tests/`                |
+| Member | Role | Owns | ML Deliverable |
+|--------|------|------|----------------|
+| Member 1 (Team Lead) | NLP/ML + Orchestrator + API | `agents/planner/`, `orchestrator/pipeline.py`, `api/` | Intent Classifier + NER |
+| Member 2 | AWS Execution + Failure ML + Monitoring | `agents/executor/`, `orchestrator/monitor.py` | Failure Predictor + Anomaly Detector |
+| Member 3 | SSH Deployment + Resource ML + Tests | `agents/ssh/`, `orchestrator/resource_predictor.py`, `tests/` | Resource Predictor (regression) |
 
 ---
 
@@ -94,135 +28,134 @@ User → API → Orchestrator → Planner → Executor → AWS → Deployment
 
 ```
 Auto-Ops/
-├── README.md
-├── requirements.txt
-├── .env.example
-├── docker-compose.yml
-├── .gitignore
-│
-├── backend/
-│   ├── README.md
-│   ├── main.py                     # FastAPI entry point
-│   ├── api/                        # 👤 Member 1
-│   │   ├── README.md
-│   │   └── deploy.py               # POST /deploy
-│   ├── orchestrator/               # 👤 Member 1
-│   │   ├── README.md
-│   │   └── engine.py               # Workflow control
-│   ├── agents/                     # 👤 Member 2
-│   │   ├── README.md
-│   │   ├── planner/
-│   │   │   ├── README.md
-│   │   │   └── planner.py
-│   │   └── executor/
-│   │       ├── README.md
-│   │       └── executor.py
-│   ├── infra/                      # 👤 Member 3
-│   │   ├── README.md
-│   │   ├── aws/
-│   │   │   ├── README.md
-│   │   │   └── ec2.py              # EC2 creation
-│   │   └── deploy/
-│   │       ├── README.md
-│   │       └── flask_deployer.py   # SSH + deploy
-│   ├── config/
-│   │   └── settings.py
-│   └── utils/
-│       └── logger.py
-│
-├── infrastructure/                 # 👤 Member 3 (optional Phase 1)
-│   ├── README.md
-│   └── terraform/
-│       └── ec2_basic/
-│           ├── main.tf
-│           ├── variables.tf
-│           └── outputs.tf
-│
-├── scripts/                        # 👤 Member 3
-│   ├── README.md
-│   ├── deploy_flask.sh
-│   └── setup.sh
-│
-├── frontend/                       # 👤 Member 4 (optional Phase 1)
-│   ├── README.md
-│   ├── src/
-│   │   ├── pages/
-│   │   ├── components/
-│   │   └── services/
-│   └── public/
-│
-├── tests/                          # 👤 Member 4
-│   ├── README.md
-│   └── test_deploy_flow.py
-│
-├── docs/
-│   └── roadmap/
-│       ├── phase1.md
-│       ├── phase2.md
-│       └── phase3.md
-│
-├── data/
-└── logs/
+├── agents/
+│   ├── planner/          ← Intent Classification + NER (Member 1)
+│   ├── executor/         ← EC2 via boto3 + Failure Prediction (Member 2)
+│   └── ssh/              ← SSH deployment via Paramiko (Member 3)
+├── orchestrator/
+│   ├── pipeline.py       ← Pipeline coordinator (Member 1)
+│   ├── monitor.py        ← Anomaly detection on logs (Member 2)
+│   └── resource_predictor.py  ← Instance recommendation ML (Member 3)
+├── api/                  ← FastAPI REST endpoints (Member 1)
+├── models/               ← Saved ML model files (git-ignored)
+├── data/seed/            ← Labelled NL training dataset (all members contribute)
+├── tests/                ← Full test suite (Member 3)
+├── scripts/              ← Setup scripts
+├── docs/                 ← Member-specific task guides
+├── CONTRACTS.md          ← ⭐ Data contracts between all agents
+├── OWNERSHIP.md          ← Who owns what
+└── PROGRESS.md           ← Weekly progress tracker
 ```
 
 ---
 
-## Expected Output (Phase 1 Demo)
+## ⚡ Quick Start (Every Team Member Does This)
 
-**Input:**
-```json
-{ "prompt": "deploy flask app" }
+### Step 1 — Clone
+```bash
+git clone <repo-url>
+cd Auto-Ops
 ```
 
-**Output:**
+### Step 2 — Setup Environment
+```bash
+bash scripts/setup_env.sh
+```
+This will:
+- Check Python 3.10+
+- Create a `venv/` virtual environment
+- Install all dependencies from `requirements.txt`
+- Download the spaCy English model
+- Create your `.env` from `.env.example`
+
+### Step 3 — Configure AWS Credentials
+Edit the `.env` file (created in Step 2):
+```
+AWS_ACCESS_KEY_ID=your_key_here
+AWS_SECRET_ACCESS_KEY=your_secret_here
+AWS_DEFAULT_REGION=us-east-1
+EC2_KEY_NAME=your-key-pair-name
+EC2_KEY_PATH=~/.ssh/your-key.pem
+EC2_SECURITY_GROUP=your-security-group-id
+```
+> ⚠️ Never commit `.env` — it's in `.gitignore`
+
+### Step 4 — Activate Environment (Every Session)
+```bash
+source venv/bin/activate
+```
+
+### Step 5 — Run the API
+```bash
+uvicorn api.main:app --reload
+```
+Visit: http://localhost:8000/docs
+
+### Step 6 — Run Tests
+```bash
+pytest tests/ -v -m "not integration and not requires_model"
+```
+
+---
+
+## 📚 Your Personal Guide
+
+Each member has a detailed task guide in `docs/`:
+
+| You Are | Read This First |
+|---------|----------------|
+| Member 1 (Team Lead) | [`docs/README_MEMBER1.md`](docs/README_MEMBER1.md) |
+| Member 2 | [`docs/README_MEMBER2.md`](docs/README_MEMBER2.md) |
+| Member 3 | [`docs/README_MEMBER3.md`](docs/README_MEMBER3.md) |
+
+> **These guides are written so that an AI assistant can read them and implement your tasks.** Open your guide, share it with your AI tool, and start building.
+
+---
+
+## 📋 Key Documents (Read in This Order)
+
+1. `README.md` — this file (project overview + setup)
+2. `CONTRACTS.md` — ⭐ data schemas between all agents (read before writing ANY code)
+3. `OWNERSHIP.md` — who owns what module
+4. `PROGRESS.md` — weekly task tracker
+5. `docs/README_MEMBER[1/2/3].md` — your personal implementation guide
+
+---
+
+## Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| FastAPI | REST API |
+| scikit-learn | Intent classification + failure/resource prediction |
+| spaCy | Named Entity Recognition (NER) |
+| boto3 | AWS EC2 provisioning |
+| Paramiko | SSH deployment |
+| pandas | Dataset management |
+| pytest | Testing |
+
+---
+
+## Data Contract (Quick Reference)
+
+A **Plan JSON** looks like this (full spec in `CONTRACTS.md`):
 ```json
 {
-  "status": "success",
-  "ip": "54.xxx.xxx.xxx",
-  "url": "http://54.xxx.xxx.xxx:5000"
+  "intent": "deploy_ec2",
+  "instance_type": "t2.micro",
+  "region": "us-east-1",
+  "app": "nginx",
+  "port": 80,
+  "count": 1,
+  "confidence": 0.94
 }
 ```
 
-**Result:**
-- ✅ EC2 instance created on AWS
-- ✅ Flask application deployed and running
-- ✅ Public URL accessible in browser
-
 ---
 
-## Getting Started
+## Contributing
 
-```bash
-# 1. Clone the repository
-git clone <repo-url> && cd Auto-Ops
-
-# 2. Set up backend
-cd backend
-python -m venv venv && source venv/bin/activate
-pip install -r ../requirements.txt
-cp ../.env.example .env  # Configure AWS credentials
-
-# 3. Run the backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-
-# 4. Test the deployment
-curl -X POST http://localhost:8000/deploy \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "deploy flask app"}'
-```
-
----
-
-## Roadmap
-
-| Phase   | Focus                                          | Timeline  |
-|---------|------------------------------------------------|-----------|
-| Phase 1 | Working E2E pipeline (Planner → EC2 → Flask)  | Month 1-2 |
-| Phase 2 | Monitoring, FinOps, Validation agents          | Month 3-5 |
-| Phase 3 | Self-healing, Dashboard, Multi-cloud            | Month 6-8 |
-
----
-
-## Goal
-
-Build a working end-to-end DevOps automation pipeline where a user types "deploy flask app" and gets a running Flask application on AWS EC2 with a public URL — fully automated, zero manual steps.
+1. Work only in your own files — see `OWNERSHIP.md`
+2. If you find a bug outside your module → open a GitHub Issue, tag the owner
+3. Update `PROGRESS.md` when you complete a task
+4. Never commit: `.env`, `.pem` files, `models/*.pkl`, `venv/`

@@ -1,48 +1,63 @@
-# Dependencies
-node_modules/
+# =========================
+# Python
+# =========================
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
-venv/
-.venv/
+*.pyd
+.Python
 *.egg-info/
+dist/
+build/
+.eggs/
 
-# Environment
+# =========================
+# Virtual Environment
+# =========================
+venv/
+env/
+.venv/
+ENV/
+
+# =========================
+# Environment & Secrets — NEVER COMMIT THESE
+# =========================
 .env
-.env.local
-.env.production
+*.pem
+*.key
+*_rsa
+*_rsa.pub
 
+# =========================
+# ML Model Binaries
+# =========================
+models/*.pkl
+models/*.joblib
+models/*.spacy
+models/*.pt
+models/*.bin
+
+# =========================
+# Data (can be large)
+# =========================
+data/processed/
+*.csv.bak
+
+# =========================
 # IDE
+# =========================
 .vscode/
 .idea/
 *.swp
-*.swo
-*~
 
+# =========================
 # OS
+# =========================
 .DS_Store
 Thumbs.db
 
-# Build
-dist/
-build/
-
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.backup
-*.tfplan
-.terraform.lock.hcl
-
+# =========================
 # Logs
+# =========================
 *.log
-logs/*.log
-
-# Keys (NEVER commit SSH keys)
-*.pem
-*.key
-keys/
-
-# Data
-data/*.json
-data/*.csv
+logs/
