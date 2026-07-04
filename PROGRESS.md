@@ -7,12 +7,12 @@
 
 | Task | Owner | Status | Notes |
 |------|-------|--------|-------|
-| Create GitHub repo + push initial structure | Member 1 | ⬜ | |
+| Create GitHub repo + push initial structure | Member 1 | ✅ | |
 | All members clone repo + run setup_env.sh | All | ⬜ | |
 | Read and agree on CONTRACTS.md | All | ⬜ | |
-| Collect seed dataset — Member 1's 100 rows | Member 1 | ⬜ | Add to `data/seed/seed_dataset_template.csv` |
-| Collect seed dataset — Member 2's 100 rows | Member 2 | ⬜ | Add to `data/seed/seed_dataset_template.csv` |
-| Collect seed dataset — Member 3's 100 rows | Member 3 | ⬜ | Add to `data/seed/seed_dataset_template.csv` |
+| Collect seed dataset — Member 1's 100 rows | Member 1 | ✅ | Add to `data/seed/seed_dataset_template.csv` |
+| Collect seed dataset — Member 2's 100 rows | Member 2 | ✅ | Add to `data/seed/seed_dataset_template.csv` |
+| Collect seed dataset — Member 3's 100 rows | Member 3 | ✅ | Add to `data/seed/seed_dataset_template.csv` |
 
 ---
 
